@@ -5,8 +5,18 @@ import * as AWS from '../../../../aws';
 
 const router: Router = Router();
 
-// Get all feed items
-router.get('/', async (req: Request, res: Response) => {
+//  ===============================================================
+//
+//  DESCRIPTION:    
+//      GET ALL RESOURCE/FEED
+//      Rest API that implements getting all resources or feeditems.
+//  USAGE:
+//      GET {{host}}/api/v0/feed
+//
+//  ===============================================================
+router.get('/',
+           async (req: Request, res: Response) => 
+{
     const items = await FeedItem.findAndCountAll({order: [['id', 'DESC']]});
     items.rows.map((item) => {
             if(item.url) {
@@ -16,9 +26,16 @@ router.get('/', async (req: Request, res: Response) => {
     res.send(items);
 });
 
+
+//  ===============================================================
+//
 //@TODO
 //Add an endpoint to GET a specific resource by Primary Key
-router.get('/search', async (request: Request, response: Response) => {
+//
+//  ===============================================================
+router.get('/search', 
+           async (request: Request, response: Response) => 
+{
     let { id } = request.query;
     if ( !id) {
         return response.status(400)
@@ -31,30 +48,61 @@ router.get('/search', async (request: Request, response: Response) => {
     response.send(item);
 });
 
-// update a specific resource
+
+//  ===============================================================
+//
+//  DESCRIPTION:    
+//      UPDATE A RESOURCE
+//      Rest API that implements updating a specific resource.
+//  USAGE:
+//      PATCH {{host}}/api/v0/:id
+//
+//  ===============================================================
 router.patch('/:id', 
-    requireAuth, 
-    async (req: Request, res: Response) => {
+             requireAuth, 
+             async (req: Request, res: Response) => 
+{
         //@TODO try it yourself
         res.send(500).send("not implemented")
 });
 
 
-// Get a signed url to put a new item in the bucket
+//  ===============================================================
+//
+//  DESCRIPTION:    
+//      GET SIGNED-URL
+//      Rest API that implements getting a singed url for a uploaded file.
+//      Get a signed url to put a new item in the bucket.
+//  USAGE:          
+//      GET {{host}}/api/v0/feed/signed-url/<filename>
+//
+//  ===============================================================
 router.get('/signed-url/:fileName', 
-    requireAuth, 
-    async (req: Request, res: Response) => {
+           requireAuth, 
+           async (req: Request, res: Response) => 
+{
     let { fileName } = req.params;
     const url = AWS.getPutSignedUrl(fileName);
     res.status(201).send({url: url});
 });
 
-// Post meta data and the filename after a file is uploaded 
-// NOTE the file name is they key name in the s3 bucket.
-// body : {caption: string, fileName: string};
+
+//  ===============================================================
+//
+//  DESCRIPTION:    
+//      POST RESOURCE METADATA
+//      Rest API that implements posting file metadata. Post metadata and the 
+//      filename after a file is uploaded.
+//      The filename is they key name in the s3 bucket.
+//      body : {caption: string, fileName: string}
+//  USAGE:
+//      POST {{host}}/api/v0/feed
+//
+//  ===============================================================
 router.post('/', 
-    requireAuth, 
-    async (req: Request, res: Response) => {
+            requireAuth, 
+            async (req: Request, res: Response) => 
+{
     const caption = req.body.caption;
     const fileName = req.body.url;
 

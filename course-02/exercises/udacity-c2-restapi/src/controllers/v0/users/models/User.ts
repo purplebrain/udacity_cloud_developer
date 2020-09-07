@@ -3,6 +3,12 @@ import {Table, Column, Model, HasMany, PrimaryKey, CreatedAt, UpdatedAt} from 's
 @Table
 export class User extends Model<User> {
   
+  @Column
+  public firstname: string
+
+  @Column
+  public lastname: string
+  
   @PrimaryKey
   @Column
   public email!: string;

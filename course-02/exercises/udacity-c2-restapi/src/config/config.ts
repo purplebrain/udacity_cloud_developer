@@ -11,7 +11,8 @@ export const config = {
     "host": process.env.POSTGRESS_HOST,
     "dialect": "postgress"
   },
-  "dev": {
+  "jwt": {
+    "secret": process.env.JWT_SECRET
   },  
   "prod": {
     "username": "", 
