@@ -18,6 +18,18 @@ router.get('/', async (req: Request, res: Response) => {
 
 //@TODO
 //Add an endpoint to GET a specific resource by Primary Key
+router.get('/search', async (request: Request, response: Response) => {
+    let { id } = request.query;
+    if ( !id) {
+        return response.status(400)
+                       .send('Please provide a valid id');
+    }
+    const item = await FeedItem.findByPk(id);
+    if(item.url) {
+        item.url = AWS.getGetSignedUrl(item.url);
+    }
+    response.send(item);
+});
 
 // update a specific resource
 router.patch('/:id', 
