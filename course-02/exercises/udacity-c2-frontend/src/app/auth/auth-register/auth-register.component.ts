@@ -28,7 +28,11 @@ export class AuthRegisterComponent implements OnInit {
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
-      name: new FormControl('', Validators.compose([
+      firstname: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-zA-Z0-9_.+-]+$')
+      ])),
+      lastname: new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+$')
       ]))
@@ -42,7 +46,8 @@ export class AuthRegisterComponent implements OnInit {
 
     const newuser: User = {
       email: this.registerForm.controls.email.value,
-      name: this.registerForm.controls.name.value
+      firstname: this.registerForm.controls.firstname.value,
+      lastname: this.registerForm.controls.lastname.value
     };
 
     this.auth.register(newuser, this.registerForm.controls.password.value)
